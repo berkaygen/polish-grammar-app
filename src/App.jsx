@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import SidebarLayout from './components/SidebarLayout'
 import Home from './pages/Home'
 import Learn from './pages/Learn'
@@ -10,7 +10,7 @@ import Results from './pages/Results'
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         {/* Pages with persistent sidebar */}
         <Route element={<SidebarLayout />}>
@@ -25,6 +25,6 @@ export default function App() {
         <Route path="/exercise" element={<Exercise />} />
         <Route path="/results" element={<Results />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
