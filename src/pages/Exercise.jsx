@@ -6,6 +6,7 @@ const TOPIC_LABELS = {
   'verb-conjugation': 'Verb Conjugation',
   'adjective-agreement': 'Adjective Agreement',
   'word-order': 'Sentence Word Order',
+  'vocabulary': 'Polish Vocabulary',
 }
 
 const TOPIC_PROGRESS = {
@@ -13,6 +14,7 @@ const TOPIC_PROGRESS = {
   'verb-conjugation':    'bg-green-500',
   'adjective-agreement': 'bg-yellow-500',
   'word-order':          'bg-orange-500',
+  'vocabulary':          'bg-purple-500',
 }
 
 const DIFFICULTY_LABELS = {

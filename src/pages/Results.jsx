@@ -7,6 +7,7 @@ const TOPIC_LABELS = {
   'verb-conjugation': 'Verb Conjugation',
   'adjective-agreement': 'Adjective Agreement',
   'word-order': 'Sentence Word Order',
+  'vocabulary': 'Polish Vocabulary',
 }
 
 const DIFFICULTY_LABELS = {
@@ -20,6 +21,7 @@ const TOPIC_BUTTON = {
   'verb-conjugation':    'bg-green-600 hover:bg-green-700',
   'adjective-agreement': 'bg-yellow-500 hover:bg-yellow-600',
   'word-order':          'bg-orange-500 hover:bg-orange-600',
+  'vocabulary':          'bg-purple-600 hover:bg-purple-700',
 }
 
 const TOPIC_BAR = {
@@ -27,6 +29,7 @@ const TOPIC_BAR = {
   'verb-conjugation':    'bg-green-500',
   'adjective-agreement': 'bg-yellow-500',
   'word-order':          'bg-orange-500',
+  'vocabulary':          'bg-purple-500',
 }
 
 function getMessage(score, count) {

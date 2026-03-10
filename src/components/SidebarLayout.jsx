@@ -130,7 +130,7 @@ export default function SidebarLayout() {
 
         {/* Footer */}
         <div className="border-t border-gray-100 px-5 py-4">
-          <p className="text-xs text-gray-400">340 questions · 4 topics · 3 levels</p>
+          <p className="text-xs text-gray-400">520 questions · 5 topics · 3 levels</p>
         </div>
 
       </aside>

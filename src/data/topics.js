@@ -55,6 +55,20 @@ export const TOPICS = [
     btnBg: 'bg-orange-500 hover:bg-orange-600',
     tagBg: 'bg-orange-50 text-orange-700',
   },
+  {
+    id: 'vocabulary',
+    label: 'Polish Vocabulary',
+    labelPl: 'Słownictwo Polskie',
+    emoji: '📚',
+    subtitle: '300 nouns, 50 verbs, 30 adjectives, 20 pronouns — most common words',
+    subtitlePl: '300 rzeczowników, 50 czasowników, 30 przymiotników, 20 zaimków',
+    iconBg: 'bg-purple-100 text-purple-700',
+    cardBorder: 'border-purple-200 hover:border-purple-400',
+    navActive: 'bg-purple-50 text-purple-700 border-l-2 border-purple-500',
+    navHover: 'hover:bg-gray-50 text-gray-600',
+    btnBg: 'bg-purple-600 hover:bg-purple-700',
+    tagBg: 'bg-purple-50 text-purple-700',
+  },
 ]
 
 export function getTopic(id) {

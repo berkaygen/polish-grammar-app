@@ -3,6 +3,7 @@ import SidebarLayout from './components/SidebarLayout'
 import Home from './pages/Home'
 import Learn from './pages/Learn'
 import LearnCase from './pages/LearnCase'
+import LearnVocabulary from './pages/LearnVocabulary'
 import Difficulty from './pages/Difficulty'
 import Exercise from './pages/Exercise'
 import Results from './pages/Results'
@@ -14,6 +15,7 @@ export default function App() {
         {/* Pages with persistent sidebar */}
         <Route element={<SidebarLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/learn/vocabulary" element={<LearnVocabulary />} />
           <Route path="/learn/:topic" element={<Learn />} />
           <Route path="/learn/noun-cases/:case" element={<LearnCase />} />
         </Route>

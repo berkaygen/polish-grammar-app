@@ -7,6 +7,7 @@ const TOPIC_LABELS = {
   'verb-conjugation': 'Verb Conjugation',
   'adjective-agreement': 'Adjective Agreement',
   'word-order': 'Sentence Word Order',
+  'vocabulary': 'Polish Vocabulary',
 }
 
 const TOPIC_COLORS = {
@@ -14,6 +15,7 @@ const TOPIC_COLORS = {
   'verb-conjugation':    { active: 'border-green-500 bg-green-50 text-green-700', ring: 'focus:ring-green-300' },
   'adjective-agreement': { active: 'border-yellow-500 bg-yellow-50 text-yellow-700', ring: 'focus:ring-yellow-300' },
   'word-order':          { active: 'border-orange-500 bg-orange-50 text-orange-700', ring: 'focus:ring-orange-300' },
+  'vocabulary':          { active: 'border-purple-500 bg-purple-50 text-purple-700', ring: 'focus:ring-purple-300' },
 }
 
 const TOPIC_START_COLORS = {
@@ -21,6 +23,7 @@ const TOPIC_START_COLORS = {
   'verb-conjugation':    'bg-green-600 hover:bg-green-700 disabled:bg-green-200',
   'adjective-agreement': 'bg-yellow-500 hover:bg-yellow-600 disabled:bg-yellow-200',
   'word-order':          'bg-orange-500 hover:bg-orange-600 disabled:bg-orange-200',
+  'vocabulary':          'bg-purple-600 hover:bg-purple-700 disabled:bg-purple-200',
 }
 
 const DIFFICULTIES = [
@@ -41,6 +44,13 @@ const ALL_CASES = [
   { id: 'vocative',     label: 'Vocative',     pl: 'Wołacz' },
 ]
 
+const ALL_VOCAB_CATEGORIES = [
+  { id: 'verbs',      label: 'Verbs',      pl: 'Czasowniki' },
+  { id: 'nouns',      label: 'Nouns',      pl: 'Rzeczowniki' },
+  { id: 'adjectives', label: 'Adjectives', pl: 'Przymiotniki' },
+  { id: 'pronouns',   label: 'Pronouns',   pl: 'Zaimki' },
+]
+
 export default function Difficulty() {
   const { topic } = useParams()
   const navigate = useNavigate()
@@ -51,14 +61,23 @@ export default function Difficulty() {
     if (navState?.preselectedCase) return new Set([navState.preselectedCase])
     return new Set(ALL_CASES.map(c => c.id))
   })
+  const [selectedVocabCats, setSelectedVocabCats] = useState(
+    () => new Set(ALL_VOCAB_CATEGORIES.map(c => c.id))
+  )
 
   const colors = TOPIC_COLORS[topic] || TOPIC_COLORS['noun-cases']
   const startColor = TOPIC_START_COLORS[topic] || TOPIC_START_COLORS['noun-cases']
   const topicLabel = TOPIC_LABELS[topic] || topic
   const isNounCases = topic === 'noun-cases'
+  const isVocabulary = topic === 'vocabulary'
+  const hasSubtypeFilter = isNounCases || isVocabulary
 
-  const toggleCase = (id) => {
-    setSelectedCases(prev => {
+  const subtypeItems = isNounCases ? ALL_CASES : isVocabulary ? ALL_VOCAB_CATEGORIES : []
+  const selectedSubtypes = isNounCases ? selectedCases : selectedVocabCats
+  const setSelectedSubtypes = isNounCases ? setSelectedCases : setSelectedVocabCats
+
+  const toggleSubtype = (id) => {
+    setSelectedSubtypes(prev => {
       const next = new Set(prev)
       next.has(id) ? next.delete(id) : next.add(id)
       return next
@@ -66,25 +85,25 @@ export default function Difficulty() {
   }
 
   const toggleAll = () => {
-    if (selectedCases.size === ALL_CASES.length) {
-      setSelectedCases(new Set())
+    if (selectedSubtypes.size === subtypeItems.length) {
+      setSelectedSubtypes(new Set())
     } else {
-      setSelectedCases(new Set(ALL_CASES.map(c => c.id)))
+      setSelectedSubtypes(new Set(subtypeItems.map(c => c.id)))
     }
   }
 
   // Available question count for the current selection
-  const availableCount = difficulty && isNounCases
-    ? getQuestions(topic, difficulty).filter(q => selectedCases.has(q.subtype)).length
+  const availableCount = difficulty && hasSubtypeFilter
+    ? getQuestions(topic, difficulty).filter(q => selectedSubtypes.has(q.subtype)).length
     : null
 
   const canStart = difficulty &&
-    (!isNounCases || (selectedCases.size > 0 && availableCount > 0))
+    (!hasSubtypeFilter || (selectedSubtypes.size > 0 && availableCount > 0))
 
   const handleStart = () => {
     let pool = getQuestions(topic, difficulty)
-    if (isNounCases) {
-      pool = pool.filter(q => selectedCases.has(q.subtype))
+    if (hasSubtypeFilter) {
+      pool = pool.filter(q => selectedSubtypes.has(q.subtype))
     }
     const drawn = sampleQuestions(pool, count)
     navigate('/exercise', {
@@ -148,38 +167,43 @@ export default function Difficulty() {
           <p className="text-xs text-gray-400">questions per session</p>
         </div>
 
-        {/* Case selection — Noun Cases only */}
-        {isNounCases && (
+        {/* Subtype selection — Noun Cases or Vocabulary */}
+        {hasSubtypeFilter && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Select cases</h2>
+              <h2 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                {isNounCases ? 'Select cases' : 'Select categories'}
+              </h2>
               <button
                 onClick={toggleAll}
-                className="text-xs text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
+                className={`text-xs transition-colors cursor-pointer ${
+                  isVocabulary ? 'text-purple-600 hover:text-purple-800' : 'text-blue-600 hover:text-blue-800'
+                }`}
               >
-                {selectedCases.size === ALL_CASES.length ? 'Deselect all' : 'Select all'}
+                {selectedSubtypes.size === subtypeItems.length ? 'Deselect all' : 'Select all'}
               </button>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {ALL_CASES.map(c => {
-                const checked = selectedCases.has(c.id)
+              {subtypeItems.map(c => {
+                const checked = selectedSubtypes.has(c.id)
+                const checkedBorder = isVocabulary ? 'border-purple-400 bg-purple-50' : 'border-blue-400 bg-blue-50'
+                const checkedBox = isVocabulary ? 'bg-purple-500 border-purple-500 text-white' : 'bg-blue-500 border-blue-500 text-white'
+                const checkedText = isVocabulary ? 'text-purple-800' : 'text-blue-800'
                 return (
                   <button
                     key={c.id}
-                    onClick={() => toggleCase(c.id)}
+                    onClick={() => toggleSubtype(c.id)}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border-2 text-left transition-all cursor-pointer ${
-                      checked
-                        ? 'border-blue-400 bg-blue-50'
-                        : 'border-gray-200 bg-white hover:border-gray-300'
+                      checked ? checkedBorder : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                   >
                     <span className={`w-4 h-4 rounded border-2 flex-shrink-0 flex items-center justify-center text-xs ${
-                      checked ? 'bg-blue-500 border-blue-500 text-white' : 'border-gray-300'
+                      checked ? checkedBox : 'border-gray-300'
                     }`}>
                       {checked && '✓'}
                     </span>
                     <span>
-                      <span className={`block text-sm font-medium ${checked ? 'text-blue-800' : 'text-gray-700'}`}>
+                      <span className={`block text-sm font-medium ${checked ? checkedText : 'text-gray-700'}`}>
                         {c.label}
                       </span>
                       <span className="block text-xs text-gray-400">{c.pl}</span>
@@ -188,13 +212,15 @@ export default function Difficulty() {
                 )
               })}
             </div>
-            {selectedCases.size === 0 && (
-              <p className="text-xs text-red-500">Select at least one case to start.</p>
+            {selectedSubtypes.size === 0 && (
+              <p className="text-xs text-red-500">
+                Select at least one {isNounCases ? 'case' : 'category'} to start.
+              </p>
             )}
-            {availableCount !== null && selectedCases.size > 0 && (
+            {availableCount !== null && selectedSubtypes.size > 0 && (
               <p className={`text-xs ${availableCount === 0 ? 'text-red-500' : 'text-gray-400'}`}>
                 {availableCount === 0
-                  ? 'No questions available for this difficulty + case combination.'
+                  ? `No questions available for this difficulty + ${isNounCases ? 'case' : 'category'} combination.`
                   : `${availableCount} question${availableCount !== 1 ? 's' : ''} available${availableCount < count ? ` — session will have ${availableCount}` : ''}`}
               </p>
             )}
@@ -209,9 +235,9 @@ export default function Difficulty() {
         >
           {!difficulty
             ? 'Select a difficulty to start'
-            : isNounCases && selectedCases.size === 0
-              ? 'Select at least one case'
-              : isNounCases && availableCount === 0
+            : hasSubtypeFilter && selectedSubtypes.size === 0
+              ? `Select at least one ${isNounCases ? 'case' : 'category'}`
+              : hasSubtypeFilter && availableCount === 0
                 ? 'No questions for this selection'
                 : `Start ${Math.min(count, availableCount ?? count)} questions →`}
         </button>
