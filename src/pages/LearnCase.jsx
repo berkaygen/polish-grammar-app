@@ -212,6 +212,16 @@ function GenitiveContent() {
           { pl: 'Dużo czasu minęło.', en: 'A lot of time has passed.', note: 'czasu = Gen after dużo' },
           { pl: 'To jest dom sąsiada.', en: "This is the neighbour's house.", note: 'sąsiada = Gen (possession)' },
           { pl: 'Nie lubię zimy.', en: "I don't like winter.", note: 'zimy = Gen (negation of lubię → lubiłam zimę)' },
+          { pl: 'Idę do szkoły.', en: 'I am going to school.', note: 'szkoły = Gen after preposition do' },
+          { pl: 'Kawa bez cukru, proszę.', en: 'Coffee without sugar, please.', note: 'cukru = Gen after preposition bez' },
+          { pl: 'To prezent dla mamy.', en: 'This is a gift for mum.', note: 'mamy = Gen after preposition dla' },
+          { pl: 'Wracam od lekarza.', en: 'I am coming back from the doctor.', note: 'lekarza = Gen after preposition od' },
+          { pl: 'Słucham polskiej muzyki.', en: 'I listen to Polish music.', note: 'polskiej muzyki = Gen after słuchać (adj + noun both in Gen)' },
+          { pl: 'Potrzebuję nowego komputera.', en: 'I need a new computer.', note: 'nowego komputera = Gen after potrzebować (adj + noun both in Gen)' },
+          { pl: 'Uczę się języka polskiego.', en: 'I am learning Polish.', note: 'języka polskiego = Gen after uczyć się' },
+          { pl: 'Boję się ciemności.', en: 'I am afraid of the dark.', note: 'ciemności = Gen after bać się' },
+          { pl: 'Nie widzę żadnych problemów.', en: "I don't see any problems.", note: 'żadnych problemów = Gen plural (negation shifts Acc → Gen)' },
+          { pl: 'Kilka dużych miast jest blisko.', en: 'A few large cities are nearby.', note: 'dużych miast = Gen plural after kilka (quantity)' },
         ]} />
       </Section>
 
